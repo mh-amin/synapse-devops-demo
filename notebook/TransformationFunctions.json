@@ -1,5 +1,5 @@
 {
-	"name": "Notebook 1",
+	"name": "TransformationFunctions",
 	"properties": {
 		"nbformat": 4,
 		"nbformat_minor": 2,
@@ -17,12 +17,12 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "4f81ac45-0687-4876-8b22-ec32f4ea98ec"
+				"spark.autotune.trackingId": "a8fa3bfc-05a4-42d6-9ee8-6403c64006fc"
 			}
 		},
 		"metadata": {
 			"saveOutput": true,
-			"enableDebugMode": false,
+			"enableDebugMode": true,
 			"kernelspec": {
 				"name": "synapse_pyspark",
 				"display_name": "Synapse PySpark"
