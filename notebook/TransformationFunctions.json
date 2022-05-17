@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "eace852b-d949-4158-9eb3-340251e8a692"
+				"spark.autotune.trackingId": "164619fd-9af8-4191-80f0-91c7b396c14d"
 			}
 		},
 		"metadata": {
@@ -160,9 +160,10 @@
 				},
 				"source": [
 					"def write_to_curated(df, path):\r\n",
-					"    df.write.parquet(path)"
+					"    repart = df.repartition(1)\r\n",
+					"    repart.write.parquet(path)"
 				],
-				"execution_count": 20
+				"execution_count": 29
 			},
 			{
 				"cell_type": "code",
@@ -184,7 +185,7 @@
 					"path = 'abfss://curated@devopsdemodevsa.dfs.core.windows.net/student_count.parquet'\r\n",
 					"write_to_curated(count_students_df, path)"
 				],
-				"execution_count": 24
+				"execution_count": 32
 			}
 		]
 	}
