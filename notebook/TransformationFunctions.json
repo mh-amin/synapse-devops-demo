@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "a8fa3bfc-05a4-42d6-9ee8-6403c64006fc"
+				"spark.autotune.trackingId": "3e56cfe2-93af-4411-9383-fdba64769685"
 			}
 		},
 		"metadata": {
@@ -62,8 +62,7 @@
 					}
 				},
 				"source": [
-					"a = 5\r\n",
-					"assert a==6"
+					"from pyspark.sql.functions import *"
 				],
 				"execution_count": 7
 			},
@@ -95,11 +94,91 @@
 				},
 				"source": [
 					"def load_data():\r\n",
-					"    data_path = 'abfss://raw@devopsdemodevsa.dfs.core.windows.net/students_adaptability_level_online_education.csv'\r\n",
+					"    data_path = 'abfss://raw@devopsdemodevsa.dfs.core.windows.net/student_adaptability.csv'\r\n",
 					"    df = spark.read.load(data_path, format='csv', header=True)\r\n",
 					"    return df"
 				],
-				"execution_count": 2
+				"execution_count": 11
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def remove_duplicates(df):\r\n",
+					"    return df.dropDuplicates([\"StudentId\"])\r\n",
+					""
+				],
+				"execution_count": 12
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def count_students_per_education_level(df):\r\n",
+					"    return df.select(\"StudentId\", \"EducationLevel\").groupBy(\"EducationLevel\").count().withColumnRenamed(\"count\", \"StudentCount\")"
+				],
+				"execution_count": 13
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def write_to_curated(df, path):\r\n",
+					"    df.write.parquet(path)"
+				],
+				"execution_count": 14
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"df = load_data()\r\n",
+					"remove_duplicates_df = remove_duplicates(df)\r\n",
+					"count_students_df = count_students_per_education_level(remove_duplicates)\r\n",
+					"path = 'abfss://curated@devopsdemodevsa.dfs.core.windows.net/student_count.parquet'\r\n",
+					"write_to_curated(count_students_df)"
+				],
+				"execution_count": 15
 			}
 		]
 	}
