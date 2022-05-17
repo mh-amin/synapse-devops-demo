@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "e5d21d21-4ee1-480d-8d32-34fa2a3fa1a3"
+				"spark.autotune.trackingId": "c4fd789b-4a84-4928-8155-62deaabb8591"
 			}
 		},
 		"metadata": {
@@ -65,7 +65,7 @@
 				"source": [
 					"%run TransformationFunctions"
 				],
-				"execution_count": 33
+				"execution_count": 34
 			},
 			{
 				"cell_type": "code",
@@ -76,7 +76,7 @@
 					"path = 'abfss://curated@devopsdemodevsa.dfs.core.windows.net/student_count.parquet'\r\n",
 					"write_to_curated(count_students_df, path)"
 				],
-				"execution_count": null
+				"execution_count": 36
 			}
 		]
 	}
