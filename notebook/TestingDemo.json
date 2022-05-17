@@ -3,17 +3,21 @@
 	"properties": {
 		"nbformat": 4,
 		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "sp02",
+			"type": "BigDataPoolReference"
+		},
 		"sessionProperties": {
-			"driverMemory": "28g",
-			"driverCores": 4,
-			"executorMemory": "28g",
-			"executorCores": 4,
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
 			"numExecutors": 2,
 			"conf": {
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "d47e7ca7-25fc-4245-bbd6-265bd8e70aa7"
+				"spark.autotune.trackingId": "d227204c-c098-4224-9c6d-f8a7ef517c4b"
 			}
 		},
 		"metadata": {
@@ -21,10 +25,25 @@
 			"enableDebugMode": false,
 			"kernelspec": {
 				"name": "synapse_pyspark",
-				"display_name": "python"
+				"display_name": "Synapse PySpark"
 			},
 			"language_info": {
 				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/81372377-4b93-4a02-9bd0-27e5bddfb895/resourceGroups/devops/providers/Microsoft.Synapse/workspaces/devopsdemodev/bigDataPools/sp02",
+				"name": "sp02",
+				"type": "Spark",
+				"endpoint": "https://devopsdemodev.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sp02",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": false
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -60,7 +79,7 @@
 					"from pyspark.sql.functions import *\r\n",
 					"import pytest"
 				],
-				"execution_count": 396
+				"execution_count": 3
 			},
 			{
 				"cell_type": "code",
@@ -82,7 +101,7 @@
 				"source": [
 					"test_mode = True"
 				],
-				"execution_count": 397
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -114,7 +133,7 @@
 				"source": [
 					"orders_schema = [\"OrderId\",\"OrderDate\", \"Region\", \"City\", \"Category\",\"Product\",\"Quantity\",\"UnitPrice\",\"TotalPrice\"]"
 				],
-				"execution_count": 398
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -156,7 +175,7 @@
 					"    return df\r\n",
 					""
 				],
-				"execution_count": 399
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -177,7 +196,7 @@
 					"    # N.B. this would actually be writing the data back to the data lake, or elsewhere...\r\n",
 					"    df.show()"
 				],
-				"execution_count": 400
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -200,7 +219,7 @@
 					"    #return df.distinct()\r\n",
 					"    return df.dropDuplicates([\"OrderId\"])"
 				],
-				"execution_count": 401
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -221,7 +240,7 @@
 					"    return df.select(\"Region\", \"TotalPrice\").groupBy(\"Region\").sum(\"TotalPrice\").withColumnRenamed(\"sum(TotalPrice)\", \"TotalSales\")\r\n",
 					""
 				],
-				"execution_count": 402
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -272,7 +291,7 @@
 					"    number_of_orders = df_result.count()\r\n",
 					"    assert number_of_orders == 1, f'Expected {expected_orders} order after remove_duplicate_orders() but {number_of_orders} returned.'"
 				],
-				"execution_count": 403
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -309,7 +328,7 @@
 					"    number_of_orders = df_result.count()\r\n",
 					"    assert number_of_orders == 3, f'Expected {expected_orders} order after remove_duplicate_orders() but {number_of_orders} returned.'"
 				],
-				"execution_count": 404
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -348,7 +367,7 @@
 					"\r\n",
 					"    assert expected_sales_east == sales_east, f'Expected regional sales to be {expected_sales_east} for East region but {sales_east} returned.'"
 				],
-				"execution_count": 405
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -370,7 +389,7 @@
 					"    similar_orders_with_different_order_id_are_not_removed()\r\n",
 					"    regional_sales_are_calculated_correctly()"
 				],
-				"execution_count": 406
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -413,7 +432,7 @@
 					"    # Output\r\n",
 					"    save_data(df_sales_by_region)"
 				],
-				"execution_count": 407
+				"execution_count": null
 			}
 		]
 	}

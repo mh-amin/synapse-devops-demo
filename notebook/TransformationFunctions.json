@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "3e56cfe2-93af-4411-9383-fdba64769685"
+				"spark.autotune.trackingId": "eace852b-d949-4158-9eb3-340251e8a692"
 			}
 		},
 		"metadata": {
@@ -64,7 +64,7 @@
 				"source": [
 					"from pyspark.sql.functions import *"
 				],
-				"execution_count": 7
+				"execution_count": 16
 			},
 			{
 				"cell_type": "code",
@@ -78,14 +78,19 @@
 							"deleting": false
 						}
 					},
+					"collapsed": false,
 					"tags": [
 						"parameters"
 					]
 				},
 				"source": [
-					""
+					"data_path = 'abfss://raw@devopsdemodevsa.dfs.core.windows.net/student_adaptability.csv'\r\n",
+					"df = spark.read.load(data_path, format='csv', header=True)\r\n",
+					"dedup_df = df.dropDuplicates([\"StudentId\"])\r\n",
+					"count_df = dedup_df.select(\"StudentId\", \"EducationLevel\").groupBy(\"EducationLevel\").count().withColumnRenamed(\"count\", \"StudentCount\")\r\n",
+					"display(count_df)"
 				],
-				"execution_count": null
+				"execution_count": 22
 			},
 			{
 				"cell_type": "code",
@@ -96,9 +101,10 @@
 					"def load_data():\r\n",
 					"    data_path = 'abfss://raw@devopsdemodevsa.dfs.core.windows.net/student_adaptability.csv'\r\n",
 					"    df = spark.read.load(data_path, format='csv', header=True)\r\n",
+					"\r\n",
 					"    return df"
 				],
-				"execution_count": 11
+				"execution_count": 17
 			},
 			{
 				"cell_type": "code",
@@ -118,7 +124,7 @@
 					"    return df.dropDuplicates([\"StudentId\"])\r\n",
 					""
 				],
-				"execution_count": 12
+				"execution_count": 18
 			},
 			{
 				"cell_type": "code",
@@ -137,7 +143,7 @@
 					"def count_students_per_education_level(df):\r\n",
 					"    return df.select(\"StudentId\", \"EducationLevel\").groupBy(\"EducationLevel\").count().withColumnRenamed(\"count\", \"StudentCount\")"
 				],
-				"execution_count": 13
+				"execution_count": 19
 			},
 			{
 				"cell_type": "code",
@@ -156,7 +162,7 @@
 					"def write_to_curated(df, path):\r\n",
 					"    df.write.parquet(path)"
 				],
-				"execution_count": 14
+				"execution_count": 20
 			},
 			{
 				"cell_type": "code",
@@ -174,11 +180,11 @@
 				"source": [
 					"df = load_data()\r\n",
 					"remove_duplicates_df = remove_duplicates(df)\r\n",
-					"count_students_df = count_students_per_education_level(remove_duplicates)\r\n",
+					"count_students_df = count_students_per_education_level(remove_duplicates_df)\r\n",
 					"path = 'abfss://curated@devopsdemodevsa.dfs.core.windows.net/student_count.parquet'\r\n",
-					"write_to_curated(count_students_df)"
+					"write_to_curated(count_students_df, path)"
 				],
-				"execution_count": 15
+				"execution_count": 24
 			}
 		]
 	}
