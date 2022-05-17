@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "bbe27706-c95c-4a8d-997c-ff106fd73c6c"
+				"spark.autotune.trackingId": "c48ecfc0-415c-45ed-bdac-dd7007bae115"
 			}
 		},
 		"metadata": {
@@ -65,32 +65,6 @@
 					"from pyspark.sql.functions import *"
 				],
 				"execution_count": 16
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					},
-					"collapsed": false,
-					"tags": [
-						"parameters"
-					]
-				},
-				"source": [
-					"data_path = 'abfss://raw@devopsdemodevsa.dfs.core.windows.net/student_adaptability.csv'\r\n",
-					"df = spark.read.load(data_path, format='csv', header=True)\r\n",
-					"dedup_df = df.dropDuplicates([\"StudentId\"])\r\n",
-					"count_df = dedup_df.select(\"StudentId\", \"EducationLevel\").groupBy(\"EducationLevel\").count().withColumnRenamed(\"count\", \"StudentCount\")\r\n",
-					"display(count_df)"
-				],
-				"execution_count": 22
 			},
 			{
 				"cell_type": "code",
@@ -164,24 +138,6 @@
 					"    repart.write.parquet(path)"
 				],
 				"execution_count": 29
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					}
-				},
-				"source": [
-					""
-				],
-				"execution_count": 32
 			}
 		]
 	}
