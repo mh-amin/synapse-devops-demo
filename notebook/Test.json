@@ -1,0 +1,184 @@
+{
+	"name": "Test",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "sp01",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "dc337c3b-6d40-443d-b94c-48ccc8dcedb7"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": true,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/81372377-4b93-4a02-9bd0-27e5bddfb895/resourceGroups/devops/providers/Microsoft.Synapse/workspaces/devopsdemodev/bigDataPools/sp01",
+				"name": "sp01",
+				"type": "Spark",
+				"endpoint": "https://devopsdemodev.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sp01",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 3,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"%run TransformationFunctions"
+				],
+				"execution_count": 54
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"from datetime import datetime"
+				],
+				"execution_count": 55
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"student_adaptability_schema = [\"StudentId\", \"EducationLevel\", \"ITStudent\", \"Device\", \"AdaptivityLevel\"]"
+				],
+				"execution_count": 56
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def test_deduplication():\r\n",
+					"     # Arrange\r\n",
+					"    df = spark.createDataFrame(\r\n",
+					"            [\r\n",
+					"                (\"5\",\t\"School\", \"No\",\t\"Mobile\",\t\"Low\"),\r\n",
+					"                (\"5\",\t\"School\", \"No\",\t\"Mobile\",\t\"Low\")\r\n",
+					"            ],\r\n",
+					"            student_adaptability_schema \r\n",
+					"        )\r\n",
+					"\r\n",
+					"    #Act\r\n",
+					"    df_result = remove_duplicates(df)\r\n",
+					"\r\n",
+					"    expected_records = 1\r\n",
+					"    number_of_records = df_result.count()\r\n",
+					"    try:\r\n",
+					"        assert number_of_records == 1, f'Test Failed: test_deduplication'\r\n",
+					"    except AssertionError as e:\r\n",
+					"        return {\"Failed\": str(e) }\r\n",
+					""
+				],
+				"execution_count": 57
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"failed = []\r\n",
+					"\r\n",
+					"error = test_deduplication()\r\n",
+					"if error:\r\n",
+					"    failed.append(error)\r\n",
+					"error = test_deduplication()\r\n",
+					"\r\n",
+					"time_stamp = datetime.now()\r\n",
+					"path = f'abfss://default@devopsdemodevsa.dfs.core.windows.net/test-results/run-{time_stamp}'\r\n",
+					"\r\n",
+					"if len(failed) == 0:\r\n",
+					"    failed.append({\"failed\": \"All tests passed\"})\r\n",
+					"\r\n",
+					"df = spark.createDataFrame(failed, schema=['Failed'])\r\n",
+					"df.repartition(1).write.csv(path)"
+				],
+				"execution_count": 58
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					""
+				],
+				"execution_count": null
+			}
+		]
+	}
+}
