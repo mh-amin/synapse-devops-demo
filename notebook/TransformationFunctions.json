@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "1be7f3dc-efe5-4b7f-b8a5-8473322fb7cf"
+				"spark.autotune.trackingId": "c95c7f8c-079e-4531-9fe3-cf737dc0247a"
 			}
 		},
 		"metadata": {
@@ -95,8 +95,8 @@
 				},
 				"source": [
 					"def remove_duplicates(df):\r\n",
-					"    return df\r\n",
-					"    #return df.dropDuplicates([\"StudentId\"])\r\n",
+					"    #return df\r\n",
+					"    return df.dropDuplicates([\"StudentId\"])\r\n",
 					""
 				],
 				"execution_count": 74
