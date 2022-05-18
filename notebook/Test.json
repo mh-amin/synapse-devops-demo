@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "3258d369-a3f2-418f-9b26-9f8b9fe2d9a2"
+				"spark.autotune.trackingId": "d041c024-0733-4d42-8432-bbba3fce3478"
 			}
 		},
 		"metadata": {
@@ -53,7 +53,25 @@
 				"source": [
 					"%run TransformationFunctions"
 				],
-				"execution_count": 25
+				"execution_count": 44
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"from datetime import datetime"
+				],
+				"execution_count": 45
 			},
 			{
 				"cell_type": "code",
@@ -71,7 +89,7 @@
 				"source": [
 					"student_adaptability_schema = [\"StudentId\", \"EducationLevel\", \"ITStudent\", \"Device\", \"AdaptivityLevel\"]"
 				],
-				"execution_count": 26
+				"execution_count": 46
 			},
 			{
 				"cell_type": "code",
@@ -109,7 +127,7 @@
 					"        return {\"failed\": str(e) }\r\n",
 					""
 				],
-				"execution_count": 27
+				"execution_count": 47
 			},
 			{
 				"cell_type": "code",
@@ -132,15 +150,15 @@
 					"if error:\r\n",
 					"    failed.append(error)\r\n",
 					"error = test_deduplication()\r\n",
-					"if error:\r\n",
-					"    failed.append(error)\r\n",
-					"print(failed)\r\n",
 					"\r\n",
+					"time_stamp = datetime.now()\r\n",
+					"path = f'abfss://default@devopsdemodevsa.dfs.core.windows.net/test-results/run-{time_stamp}'\r\n",
+					"if len(failed) == 0:\r\n",
+					"    failed.append({\"failed\": \"None\"})\r\n",
 					"df = spark.createDataFrame(failed, schema=['failed'])\r\n",
-					"display(df)\r\n",
-					"df.write.csv()"
+					"df.repartition(1).write.csv(path)"
 				],
-				"execution_count": 29
+				"execution_count": 52
 			},
 			{
 				"cell_type": "code",
