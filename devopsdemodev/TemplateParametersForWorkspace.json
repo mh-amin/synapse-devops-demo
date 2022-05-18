@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "devopsdemodev"
+		},
+		"devopsdemodev-WorkspaceDefaultSqlServer_connectionString": {
+			"value": ""
+		},
+		"devopsdemodev-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://devopsdemodevsa.dfs.core.windows.net"
+		}
+	}
+}

@@ -1,0 +1,606 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"type": "string",
+			"metadata": "Workspace name",
+			"defaultValue": "devopsdemodev"
+		},
+		"devopsdemodev-WorkspaceDefaultSqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'devopsdemodev-WorkspaceDefaultSqlServer'"
+		},
+		"devopsdemodev-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://devopsdemodevsa.dfs.core.windows.net"
+		}
+	},
+	"variables": {
+		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/devopsdemodev-WorkspaceDefaultSqlServer')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"parameters": {
+					"DBName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('devopsdemodev-WorkspaceDefaultSqlServer_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/devopsdemodev-WorkspaceDefaultStorage')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('devopsdemodev-WorkspaceDefaultStorage_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
+			"type": "Microsoft.Synapse/workspaces/credentials",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Test')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "sp01",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "78dfd50c-067e-44d2-a85a-1516879e4984"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": true,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/81372377-4b93-4a02-9bd0-27e5bddfb895/resourceGroups/devops/providers/Microsoft.Synapse/workspaces/devopsdemodev/bigDataPools/sp01",
+						"name": "sp01",
+						"type": "Spark",
+						"endpoint": "https://devopsdemodev.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sp01",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.1",
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"source": [
+							"%run TransformationFunctions"
+						],
+						"outputs": [],
+						"execution_count": 54
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"from datetime import datetime"
+						],
+						"outputs": [],
+						"execution_count": 55
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"student_adaptability_schema = [\"StudentId\", \"EducationLevel\", \"ITStudent\", \"Device\", \"AdaptivityLevel\"]"
+						],
+						"outputs": [],
+						"execution_count": 56
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def test_deduplication():\r\n",
+							"     # Arrange\r\n",
+							"    df = spark.createDataFrame(\r\n",
+							"            [\r\n",
+							"                (\"5\",\t\"School\", \"No\",\t\"Mobile\",\t\"Low\"),\r\n",
+							"                (\"5\",\t\"School\", \"No\",\t\"Mobile\",\t\"Low\")\r\n",
+							"            ],\r\n",
+							"            student_adaptability_schema \r\n",
+							"        )\r\n",
+							"\r\n",
+							"    #Act\r\n",
+							"    df_result = remove_duplicates(df)\r\n",
+							"\r\n",
+							"    expected_records = 1\r\n",
+							"    number_of_records = df_result.count()\r\n",
+							"    try:\r\n",
+							"        assert number_of_records == 1, f'Test Failed: test_deduplication'\r\n",
+							"    except AssertionError as e:\r\n",
+							"        return {\"Failed\": str(e) }\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 57
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"failed = []\r\n",
+							"\r\n",
+							"error = test_deduplication()\r\n",
+							"if error:\r\n",
+							"    failed.append(error)\r\n",
+							"error = test_deduplication()\r\n",
+							"\r\n",
+							"time_stamp = datetime.now()\r\n",
+							"path = f'abfss://default@devopsdemodevsa.dfs.core.windows.net/test-results/run-{time_stamp}'\r\n",
+							"\r\n",
+							"if len(failed) == 0:\r\n",
+							"    failed.append({\"failed\": \"All tests passed\"})\r\n",
+							"\r\n",
+							"df = spark.createDataFrame(failed, schema=['Failed'])\r\n",
+							"df.repartition(1).write.csv(path)"
+						],
+						"outputs": [],
+						"execution_count": 58
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							""
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Transform')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "sp01",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "6b07ef73-6560-4da0-a43f-74e07a24a172"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": true,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/81372377-4b93-4a02-9bd0-27e5bddfb895/resourceGroups/devops/providers/Microsoft.Synapse/workspaces/devopsdemodev/bigDataPools/sp01",
+						"name": "sp01",
+						"type": "Spark",
+						"endpoint": "https://devopsdemodev.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sp01",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.1",
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"%run TransformationFunctions"
+						],
+						"outputs": [],
+						"execution_count": 10
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"from datetime import datetime"
+						],
+						"outputs": [],
+						"execution_count": 11
+					},
+					{
+						"cell_type": "code",
+						"source": [
+							"df = load_data()\r\n",
+							"remove_duplicates_df = remove_duplicates(df)\r\n",
+							"count_students_df = count_students_per_education_level(remove_duplicates_df)\r\n",
+							"time_stamp = datetime.now()\r\n",
+							"path = f'abfss://curated@devopsdemodevsa.dfs.core.windows.net/{time_stamp}/student_count.parquet'\r\n",
+							"write_to_curated(count_students_df, path)"
+						],
+						"outputs": [],
+						"execution_count": 14
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/TransformationFunctions')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "sp01",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "eadf9c4a-ed28-4465-8b1b-90816a13fc5c"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": true,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/81372377-4b93-4a02-9bd0-27e5bddfb895/resourceGroups/devops/providers/Microsoft.Synapse/workspaces/devopsdemodev/bigDataPools/sp01",
+						"name": "sp01",
+						"type": "Spark",
+						"endpoint": "https://devopsdemodev.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sp01",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.1",
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"from pyspark.sql.functions import *"
+						],
+						"outputs": [],
+						"execution_count": 64
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"collapsed": false
+						},
+						"source": [
+							"def load_data():\r\n",
+							"    data_path = 'abfss://raw@devopsdemodevsa.dfs.core.windows.net/student_adaptability.csv'\r\n",
+							"    df = spark.read.load(data_path, format='csv', header=True)\r\n",
+							"\r\n",
+							"    return df"
+						],
+						"outputs": [],
+						"execution_count": 65
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def remove_duplicates(df):\r\n",
+							"    #return df\r\n",
+							"    return df.dropDuplicates([\"StudentId\"])\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 74
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def count_students_per_education_level(df):\r\n",
+							"    return df.select(\"StudentId\", \"EducationLevel\").groupBy(\"EducationLevel\").count().withColumnRenamed(\"count\", \"StudentCount\")"
+						],
+						"outputs": [],
+						"execution_count": 67
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def write_to_curated(df, path):\r\n",
+							"    df.repartition(1).write.parquet(path)"
+						],
+						"outputs": [],
+						"execution_count": 1
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sp01')]",
+			"type": "Microsoft.Synapse/workspaces/bigDataPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"autoPause": {
+					"enabled": true,
+					"delayInMinutes": 15
+				},
+				"autoScale": {
+					"enabled": true,
+					"maxNodeCount": 10,
+					"minNodeCount": 3
+				},
+				"nodeCount": 3,
+				"nodeSize": "Medium",
+				"nodeSizeFamily": "MemoryOptimized",
+				"sparkVersion": "3.1",
+				"libraryRequirements": {
+					"content": "pytest",
+					"filename": "requirements.txt.txt",
+					"time": "2022-05-18T00:11:22.0392494Z"
+				},
+				"isComputeIsolationEnabled": false,
+				"sessionLevelPackagesEnabled": true,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "canadacentral"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sp02')]",
+			"type": "Microsoft.Synapse/workspaces/bigDataPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"autoPause": {
+					"enabled": true,
+					"delayInMinutes": 15
+				},
+				"autoScale": {
+					"enabled": true,
+					"maxNodeCount": 10,
+					"minNodeCount": 3
+				},
+				"nodeCount": 10,
+				"nodeSize": "Medium",
+				"nodeSizeFamily": "MemoryOptimized",
+				"sparkVersion": "3.1",
+				"libraryRequirements": {
+					"content": "pytest",
+					"filename": "requirements.txt.txt",
+					"time": "2022-05-17T23:17:43.7236104Z"
+				},
+				"isComputeIsolationEnabled": false,
+				"sessionLevelPackagesEnabled": false,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "canadacentral"
+		}
+	]
+}
