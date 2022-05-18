@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "14dbf112-2705-4640-ba60-4be8bd5870b0"
+				"spark.autotune.trackingId": "70c3e294-a25a-425e-a3ff-bba62cbe40b3"
 			}
 		},
 		"metadata": {
@@ -53,7 +53,7 @@
 				"source": [
 					"%run TransformationFunctions"
 				],
-				"execution_count": 80
+				"execution_count": 85
 			},
 			{
 				"cell_type": "code",
@@ -71,7 +71,7 @@
 				"source": [
 					"import pytest"
 				],
-				"execution_count": 81
+				"execution_count": 86
 			},
 			{
 				"cell_type": "code",
@@ -89,7 +89,7 @@
 				"source": [
 					"student_adaptability_schema = [\"StudentId\", \"EducationLevel\", \"ITStudent\", \"Device\", \"AdaptivityLevel\"]"
 				],
-				"execution_count": 82
+				"execution_count": 87
 			},
 			{
 				"cell_type": "code",
@@ -126,7 +126,7 @@
 					"    number_of_records = df_result.count()\r\n",
 					"    assert number_of_records == 1, f'Error.'"
 				],
-				"execution_count": 83
+				"execution_count": 88
 			},
 			{
 				"cell_type": "code",
@@ -145,7 +145,7 @@
 				"source": [
 					"test_deduplication()"
 				],
-				"execution_count": 84
+				"execution_count": 89
 			}
 		]
 	}
