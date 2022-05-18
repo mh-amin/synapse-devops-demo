@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "c95c7f8c-079e-4531-9fe3-cf737dc0247a"
+				"spark.autotune.trackingId": "698198e1-dd9e-49ef-86e1-da293999c802"
 			}
 		},
 		"metadata": {
@@ -135,10 +135,9 @@
 				},
 				"source": [
 					"def write_to_curated(df, path):\r\n",
-					"    repart = df.repartition(1)\r\n",
-					"    repart.write.parquet(path)"
+					"    df.repartition(1).write.parquet(path)"
 				],
-				"execution_count": 68
+				"execution_count": 1
 			}
 		]
 	}
