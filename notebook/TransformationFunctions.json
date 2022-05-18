@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "c48ecfc0-415c-45ed-bdac-dd7007bae115"
+				"spark.autotune.trackingId": "1300e9c8-936b-4f0a-a974-2c040d378bf4"
 			}
 		},
 		"metadata": {
@@ -41,8 +41,8 @@
 				},
 				"sparkVersion": "3.1",
 				"nodeCount": 3,
-				"cores": 4,
-				"memory": 28,
+				"cores": 8,
+				"memory": 56,
 				"automaticScaleJobs": false
 			},
 			"sessionKeepAliveTimeout": 30
@@ -64,7 +64,7 @@
 				"source": [
 					"from pyspark.sql.functions import *"
 				],
-				"execution_count": 16
+				"execution_count": 42
 			},
 			{
 				"cell_type": "code",
@@ -78,7 +78,7 @@
 					"\r\n",
 					"    return df"
 				],
-				"execution_count": 17
+				"execution_count": 43
 			},
 			{
 				"cell_type": "code",
@@ -95,10 +95,11 @@
 				},
 				"source": [
 					"def remove_duplicates(df):\r\n",
-					"    return df.dropDuplicates([\"StudentId\"])\r\n",
+					"    return df.distinct() \r\n",
+					"    #return df.dropDuplicates([\"StudentId\"])\r\n",
 					""
 				],
-				"execution_count": 18
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -117,7 +118,7 @@
 					"def count_students_per_education_level(df):\r\n",
 					"    return df.select(\"StudentId\", \"EducationLevel\").groupBy(\"EducationLevel\").count().withColumnRenamed(\"count\", \"StudentCount\")"
 				],
-				"execution_count": 19
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -137,7 +138,7 @@
 					"    repart = df.repartition(1)\r\n",
 					"    repart.write.parquet(path)"
 				],
-				"execution_count": 29
+				"execution_count": null
 			}
 		]
 	}
