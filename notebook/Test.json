@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "d041c024-0733-4d42-8432-bbba3fce3478"
+				"spark.autotune.trackingId": "dc337c3b-6d40-443d-b94c-48ccc8dcedb7"
 			}
 		},
 		"metadata": {
@@ -53,7 +53,7 @@
 				"source": [
 					"%run TransformationFunctions"
 				],
-				"execution_count": 44
+				"execution_count": 54
 			},
 			{
 				"cell_type": "code",
@@ -71,7 +71,7 @@
 				"source": [
 					"from datetime import datetime"
 				],
-				"execution_count": 45
+				"execution_count": 55
 			},
 			{
 				"cell_type": "code",
@@ -89,7 +89,7 @@
 				"source": [
 					"student_adaptability_schema = [\"StudentId\", \"EducationLevel\", \"ITStudent\", \"Device\", \"AdaptivityLevel\"]"
 				],
-				"execution_count": 46
+				"execution_count": 56
 			},
 			{
 				"cell_type": "code",
@@ -118,16 +118,15 @@
 					"    #Act\r\n",
 					"    df_result = remove_duplicates(df)\r\n",
 					"\r\n",
-					"\r\n",
 					"    expected_records = 1\r\n",
 					"    number_of_records = df_result.count()\r\n",
 					"    try:\r\n",
 					"        assert number_of_records == 1, f'Test Failed: test_deduplication'\r\n",
 					"    except AssertionError as e:\r\n",
-					"        return {\"failed\": str(e) }\r\n",
+					"        return {\"Failed\": str(e) }\r\n",
 					""
 				],
-				"execution_count": 47
+				"execution_count": 57
 			},
 			{
 				"cell_type": "code",
@@ -153,12 +152,14 @@
 					"\r\n",
 					"time_stamp = datetime.now()\r\n",
 					"path = f'abfss://default@devopsdemodevsa.dfs.core.windows.net/test-results/run-{time_stamp}'\r\n",
+					"\r\n",
 					"if len(failed) == 0:\r\n",
-					"    failed.append({\"failed\": \"None\"})\r\n",
-					"df = spark.createDataFrame(failed, schema=['failed'])\r\n",
+					"    failed.append({\"failed\": \"All tests passed\"})\r\n",
+					"\r\n",
+					"df = spark.createDataFrame(failed, schema=['Failed'])\r\n",
 					"df.repartition(1).write.csv(path)"
 				],
-				"execution_count": 52
+				"execution_count": 58
 			},
 			{
 				"cell_type": "code",
