@@ -1,0 +1,35 @@
+{
+	"name": "Test",
+	"properties": {
+		"activities": [
+			{
+				"name": "UnitTest",
+				"type": "SynapseNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebook": {
+						"referenceName": "Test",
+						"type": "NotebookReference"
+					},
+					"snapshot": true,
+					"sparkPool": {
+						"referenceName": "sp01",
+						"type": "BigDataPoolReference"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Test"
+		},
+		"annotations": []
+	}
+}
