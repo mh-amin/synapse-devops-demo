@@ -200,7 +200,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "78dfd50c-067e-44d2-a85a-1516879e4984"
+						"spark.autotune.trackingId": "2a916e43-61d8-45aa-8762-82195a222ac3"
 					}
 				},
 				"metadata": {
@@ -340,7 +340,7 @@
 							"path = f'abfss://default@devopsdemodevsa.dfs.core.windows.net/test-results/run-{time_stamp}'\r\n",
 							"\r\n",
 							"if len(failed) == 0:\r\n",
-							"    failed.append({\"failed\": \"All tests passed\"})\r\n",
+							"      failed.append({\"failed\": \"All tests passed\"})\r\n",
 							"\r\n",
 							"df = spark.createDataFrame(failed, schema=['Failed'])\r\n",
 							"df.repartition(1).write.csv(path)"
@@ -499,7 +499,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "eadf9c4a-ed28-4465-8b1b-90816a13fc5c"
+						"spark.autotune.trackingId": "7c9b1278-7f39-4b1c-8419-ccf69419270a"
 					}
 				},
 				"metadata": {
@@ -524,7 +524,8 @@
 						"sparkVersion": "3.1",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56
+						"memory": 56,
+						"automaticScaleJobs": false
 					},
 					"sessionKeepAliveTimeout": 30
 				},
